@@ -23,7 +23,9 @@
   },
   "homepage": "https://github.com/mhoumann87/conference_website#readme",
   "dependencies": {
-    "express": "^4.16.4"
+    "express": "^4.16.4",
+    "http-errors": "^1.7.2",
+    "pug": "^2.0.3"
   },
   "devDependencies": {
     "nodemon": "^1.18.10"
