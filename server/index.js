@@ -1,8 +1,10 @@
 const express = require('express');
 const createError = require('http-errors');
 const path = require('path');
+const bodyParser = require('body-parser');
 const configs = require('./config');
 const SpeakerService = require('./services/SpeakerService');
+const FeedbackService = require('./services/FeedbackService');
 
 const app = express();
 
@@ -10,7 +12,7 @@ const port = process.env.PORT || 3000;
 
 const config = configs[app.get('env')];
 const speakerService = new SpeakerService(config.data.speakers);
-//const feedbackService = new FeedbackService(config.data.feedback);
+const feedbackService = new FeedbackService(config.data.feedback);
 app.set('view engine', 'pug');
 if (app.get('env') === 'development') {
   app.locals.pretty = true;
@@ -20,6 +22,9 @@ app.locals.title = config.sitename;
 
 const routes = require('./routes');
 app.use(express.static('public'));
+
+app.use(bodyParser.urlencoded({ extended: true }));
+
 app.get('/favicon.ico', (req, res, next) => {
   return res.sendStatus(204);
 });
@@ -37,7 +42,8 @@ app.use(async (req, res, next) => {
 app.use(
   '/',
   routes({
-    speakerService
+    speakerService,
+    feedbackService
   })
 );
 
